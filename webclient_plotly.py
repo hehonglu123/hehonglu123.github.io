@@ -26,6 +26,9 @@ async def client_plotly():
 		m1k_obj.async_StartStreaming(None)
 		samples_wire=await m1k_obj.samples.AsyncConnect(None)
 		print_div("Running!")
+		#hide start
+		document.getElementById("start").style.display = "none";
+
 
 		while True:
 			try:
