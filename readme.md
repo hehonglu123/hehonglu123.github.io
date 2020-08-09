@@ -8,4 +8,9 @@ Type in `about:config`
 
 ### Usage:
 Make sure have the m1k service running!
+
 Simply open the index.html with FireFox browser. Or go to https://hehonglu123.github.io/m1k_rr_web/.
+
+At the top left, input your IP address of the service.
+
+
