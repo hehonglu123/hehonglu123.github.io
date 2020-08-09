@@ -13,7 +13,7 @@ timestamp=0
 async def client_plotly():
 
 	try:
-		m1k_obj=await RRN.AsyncConnectService('rr+ws://192.168.56.1:11111/?service=m1k',None,None,None,None)
+		m1k_obj=await RRN.AsyncConnectService('rr+ws://192.168.1.233:11111/?service=m1k',None,None,None,None)
 		#set mode for each channel
 		m1k_obj.async_setmode('A','SVMI',None)
 		m1k_obj.async_setmode('B','HI_Z',None)
