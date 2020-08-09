@@ -1,0 +1,278 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        .dropbtn {
+          background-color: #3498DB;
+          color: white;
+          padding: 16px;
+          font-size: 16px;
+          border: none;
+          cursor: pointer;
+        }
+
+        .dropbtn:hover, .dropbtn:focus {
+          background-color: #2980B9;
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          overflow: auto;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd;}
+
+        .show {display:block;}
+
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 90px;
+          height: 34px;
+        }
+
+        .switch input {display:none;}
+
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ca2222;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 26px;
+          width: 26px;
+          left: 4px;
+          bottom: 4px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+
+        input:checked + .slider {
+          background-color: #2ab934;
+        }
+
+        input:focus + .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+          -webkit-transform: translateX(55px);
+          -ms-transform: translateX(55px);
+          transform: translateX(55px);
+        }
+
+        /*------ ADDED CSS ---------*/
+        .on
+        {
+          display: none;
+        }
+
+        .on, .off
+        {
+          color: white;
+          position: absolute;
+          transform: translate(-50%,-50%);
+          top: 50%;
+          left: 50%;
+          font-size: 10px;
+          font-family: Verdana, sans-serif;
+        }
+
+        input:checked+ .slider .on
+        {display: block;}
+
+        input:checked + .slider .off
+        {display: none;}
+
+        /*--------- END --------*/
+
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 34px;
+        }
+
+        .slider.round:before {
+          border-radius: 50%;}
+        </style>
+        <!-- load dependencies -->
+        <script src="https://code.jquery.com/jquery-latest.js"></script>
+        <script src="https://robotraconteur.github.io/robotraconteur_pyodide/pyodide.js"></script>  
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>  
+    </head>
+    <body>
+        
+        <script>
+            
+            function print_div(message)
+            {
+                $("#print_div").append("<p>" + message)
+            }
+            /* When the user clicks on the button, 
+            toggle between hiding and showing the dropdown content */
+            function Channel_A() {
+              document.getElementById("Channel_A").classList.toggle("show");
+            }
+            function Channel_B() {
+              document.getElementById("Channel_B").classList.toggle("show");
+            }
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function(event) {
+              if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                  var openDropdown = dropdowns[i];
+                  if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                  }
+                }
+              }
+            }
+            // Oscilloscope plotly function
+            async function run_test(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                // await pyodide.loadPackage(["matplotlib"]);     
+                const response = await fetch("webclient_plotly.py", {cache: "no-store"});
+                const client_py = await response.text();
+                pyodide.runPython(client_py)
+            }
+            // led function
+            async function led_on(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("led_on.py", {cache: "no-store"});
+                const led_on = await response.text();
+                pyodide.runPython(led_on)
+            }
+            async function led_off(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("led_off.py", {cache: "no-store"});
+                const led_off = await response.text();
+                pyodide.runPython(led_off)
+            }
+            
+            // change channel mode
+            async function change_mode_A_HI_Z(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("change_mode_A_HI_Z.py", {cache: "no-store"});
+                const change_mode_A_HI_Z = await response.text();
+                pyodide.runPython(change_mode_A_HI_Z)
+            }
+            async function change_mode_A_SVMI(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("change_mode_A_SVMI.py", {cache: "no-store"});
+                const change_mode_A_SVMI = await response.text();
+                pyodide.runPython(change_mode_A_SVMI)
+            }
+            async function change_mode_A_SIMV(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("change_mode_A_SIMV.py", {cache: "no-store"});
+                const change_mode_A_SIMV = await response.text();
+                pyodide.runPython(change_mode_A_SIMV)
+            }
+            async function change_mode_B_HI_Z(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("change_mode_B_HI_Z.py", {cache: "no-store"});
+                const change_mode_B_HI_Z = await response.text();
+                pyodide.runPython(change_mode_B_HI_Z)
+            }
+            async function change_mode_B_SVMI(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("change_mode_B_SVMI.py", {cache: "no-store"});
+                const change_mode_B_SVMI = await response.text();
+                pyodide.runPython(change_mode_B_SVMI)
+            }
+            async function change_mode_B_SIMV(){
+                await languagePluginLoader;
+                await pyodide.loadPackage(["numpy"]);  
+                const response = await fetch("change_mode_B_SIMV.py", {cache: "no-store"});
+                const change_mode_B_SIMV = await response.text();
+                pyodide.runPython(change_mode_B_SIMV)
+            }
+            
+        </script>
+
+        <H2>Robot Raconteur M1K Web Interface</H2>
+        <button type="button" onclick=run_test()>Start!</button>
+        <!-- dropdown -->
+
+        <div class="dropdown">
+          <button onclick="Channel_A()" class="dropbtn">Channel A</button>
+          <div id="Channel_A" class="dropdown-content">
+            <a onclick=change_mode_A_HI_Z()>HI_Z</a>
+            <a onclick=change_mode_A_SVMI()>SVMI</a>
+            <a onclick=change_mode_A_SIMV()>SIMV</a>
+          </div>
+        </div>
+
+        <div class="dropdown">
+          <button onclick="Channel_B()" class="dropbtn">Channel B</button>
+          <div id="Channel_B" class="dropdown-content">
+            <a onclick=change_mode_B_HI_Z()>HI_Z</a>
+            <a onclick=change_mode_B_SVMI()>SVMI</a>
+            <a onclick=change_mode_B_SIMV()>SIMV</a>
+          </div>
+        </div>
+
+        <!-- led switch -->
+        <label class="switch"><input type="checkbox" id="togBtn"><div class="slider round"><!--ADDED HTML --><span class="on">ON</span><span class="off">OFF</span><!--END--></div>
+            <script>
+                var switchStatus = false;
+                    $("#togBtn").on('change', function() {
+                        if ($(this).is(':checked')) {
+                            switchStatus = $(this).is(':checked');
+                            led_on();// To verify
+                        }
+                        else {
+                           switchStatus = $(this).is(':checked');
+                           led_off();// To verify
+                        }
+                    });
+            </script>
+        </label>
+
+
+
+        <div id="plot">      <!-- Plotly chart will be drawn inside this DIV -->  </div>
+        
+        <div id="print_div"></div>  
+
+        
+
+    </body>
+</html>
