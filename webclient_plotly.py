@@ -4,7 +4,7 @@ import numpy as np
 import time, traceback
 from js import Plotly
 
-ip='128.213.64.202'
+ip='localhost'
 
 periodvalue=50
 x = np.linspace(0, 1, periodvalue)
@@ -15,7 +15,7 @@ timestamp=0
 async def client_plotly():
 
 	try:
-		m1k_obj=await RRN.AsyncConnectService('rr+ws://'+ip+'/?service=m1k',None,None,None,None)
+		m1k_obj=await RRN.AsyncConnectService('rr+ws://'+ip+':11111/?service=m1k',None,None,None,None)
 		#set mode for each channel
 		m1k_obj.async_setmode('A','SVMI',None)
 		m1k_obj.async_setmode('B','HI_Z',None)
