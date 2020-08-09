@@ -1,10 +1,10 @@
-from js import print_div
+from js import print_div, document
 from RobotRaconteur.Client import *
 import numpy as np
 import time, traceback
 from js import Plotly
 
-ip='localhost'
+ip=document.getElementById("ip").value
 
 periodvalue=50
 x = np.linspace(0, 1, periodvalue)
