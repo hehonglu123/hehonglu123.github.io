@@ -2,7 +2,7 @@ from RobotRaconteur.Client import *
 import traceback
 from js import print_div
 ####################Start Service and robot setup
-ip='192.168.1.233'
+ip='128.213.64.202'
 async def change_mode():
 	m1k_obj=await RRN.AsyncConnectService('rr+ws://'+ip+'/?service=m1k',None,None,None,None)
 

@@ -4,7 +4,7 @@ import numpy as np
 import time, traceback
 from js import Plotly
 
-ip='192.168.1.233'
+ip='128.213.64.202'
 
 periodvalue=50
 x = np.linspace(0, 1, periodvalue)
