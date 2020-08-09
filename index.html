@@ -305,8 +305,8 @@
 
 				<H2>Robot Raconteur M1K Web Interface</H2>
 				<div id="ip_div">
-				<label for="ip">IP Address:</label>
-				<textarea id="ip" name="ip" rows="1" cols="20">localhost</textarea>
+					<label for="ip">IP Address:</label>
+					<textarea id="ip" name="ip" rows="1" cols="20">localhost</textarea>
 				</div>
 
 				<div id="start">
@@ -370,7 +370,26 @@
 										});
 						</script>
 				</label>
-
+				<div id="min_div">
+					<label for="min">Min Value:</label>
+					<textarea id="min" name="min" rows="1" cols="5">0</textarea>
+				</div>
+				<div id="max_div">
+					<label for="max">Max Value:</label>
+					<textarea id="max" name="max" rows="1" cols="5">5</textarea>
+				</div>
+				<div id="period_div">
+					<label for="period">Period:</label>
+					<textarea id="period" name="period" rows="1" cols="5">100</textarea>
+				</div>
+				<div id="delay_div">
+					<label for="delay">Delay frac_Period:</label>
+					<textarea id="delay" name="delay" rows="1" cols="5">0.25</textarea>
+				</div>
+				<div id="duty_div">
+					<label for="duty">Duty Cycle, Square only:</label>
+					<textarea id="duty" name="duty" rows="1" cols="5">0.5</textarea>
+				</div>
 
 				<div id="plot">      <!-- Plotly chart will be drawn inside this DIV -->  </div>
 				
