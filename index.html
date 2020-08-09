@@ -143,6 +143,12 @@
 						function Channel_B() {
 							document.getElementById("Channel_B").classList.toggle("show");
 						}
+						function Waveform_A() {
+							document.getElementById("Waveform_A").classList.toggle("show");
+						}
+						function Waveform_B() {
+							document.getElementById("Waveform_B").classList.toggle("show");
+						}
 						// Close the dropdown if the user clicks outside of it
 						window.onclick = function(event) {
 							if (!event.target.matches('.dropbtn')) {
@@ -224,19 +230,89 @@
 								const change_mode_B_SIMV = await response.text();
 								pyodide.runPython(change_mode_B_SIMV)
 						}
+						async function waveform_a_sine(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_a_sine.py", {cache: "no-store"});
+								const waveform_a_sine = await response.text();
+								pyodide.runPython(waveform_a_sine)
+						}
+						async function waveform_a_triangle(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_a_triangle.py", {cache: "no-store"});
+								const waveform_a_triangle = await response.text();
+								pyodide.runPython(waveform_a_triangle)
+						}
+						async function waveform_a_sawtooth(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_a_sawtooth.py", {cache: "no-store"});
+								const waveform_a_sawtooth = await response.text();
+								pyodide.runPython(waveform_a_sawtooth)
+						}
+						async function waveform_a_stairstep(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_a_stairstep.py", {cache: "no-store"});
+								const waveform_a_stairstep = await response.text();
+								pyodide.runPython(waveform_a_stairstep)
+						}
+						async function waveform_a_square(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_a_square.py", {cache: "no-store"});
+								const waveform_a_square = await response.text();
+								pyodide.runPython(waveform_a_square)
+						}
+						async function waveform_b_sine(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_b_sine.py", {cache: "no-store"});
+								const waveform_b_sine = await response.text();
+								pyodide.runPython(waveform_b_sine)
+						}
+						async function waveform_b_triangle(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_b_triangle.py", {cache: "no-store"});
+								const waveform_b_triangle = await response.text();
+								pyodide.runPython(waveform_b_triangle)
+						}
+						async function waveform_b_sawtooth(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_b_sawtooth.py", {cache: "no-store"});
+								const waveform_b_sawtooth = await response.text();
+								pyodide.runPython(waveform_b_sawtooth)
+						}
+						async function waveform_b_stairstep(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_b_stairstep.py", {cache: "no-store"});
+								const waveform_b_stairstep = await response.text();
+								pyodide.runPython(waveform_b_stairstep)
+						}
+						async function waveform_b_square(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_b_square.py", {cache: "no-store"});
+								const waveform_b_square = await response.text();
+								pyodide.runPython(waveform_b_square)
+						}
 						
 				</script>
 
 				<H2>Robot Raconteur M1K Web Interface</H2>
 				<div id="ip_div">
 				<label for="ip">IP Address:</label>
-				<textarea id="ip" name="ip" rows="1" cols="20">IP address</textarea>
+				<textarea id="ip" name="ip" rows="1" cols="20">localhost</textarea>
 				</div>
 
 
 				<button type="button" onclick=run_test()>Start!</button>
 				<!-- dropdown -->
-
+				<!-- mode change -->
 				<div class="dropdown">
 					<button onclick="Channel_A()" class="dropbtn">Channel A</button>
 					<div id="Channel_A" class="dropdown-content">
@@ -252,6 +328,28 @@
 						<a onclick=change_mode_B_HI_Z()>HI_Z</a>
 						<a onclick=change_mode_B_SVMI()>SVMI</a>
 						<a onclick=change_mode_B_SIMV()>SIMV</a>
+					</div>
+				</div>
+				<!-- waveform change -->
+				<div class="dropdown">
+					<button onclick="Waveform_A()" class="dropbtn">Waveform A</button>
+					<div id="Waveform_A" class="dropdown-content">
+						<a onclick=waveform_a_sine()>sine</a>
+						<a onclick=waveform_a_triangle()>triangle</a>
+						<a onclick=waveform_a_sawtooth()>sawtooth</a>
+						<a onclick=waveform_a_stairstep()>stairstep</a>
+						<a onclick=waveform_a_square()>square</a>
+					</div>
+				</div>
+
+				<div class="dropdown">
+					<button onclick="Waveform_B()" class="dropbtn">Waveform B</button>
+					<div id="Waveform_B" class="dropdown-content">
+						<a onclick=waveform_b_sine()>sine</a>
+						<a onclick=waveform_b_triangle()>triangle</a>
+						<a onclick=waveform_b_sawtooth()>sawtooth</a>
+						<a onclick=waveform_b_stairstep()>stairstep</a>
+						<a onclick=waveform_b_square()>square</a>
 					</div>
 				</div>
 
