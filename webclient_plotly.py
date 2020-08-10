@@ -15,7 +15,22 @@ timestamp=0
 async def client_plotly():
 
 	try:
-		m1k_obj=await RRN.AsyncConnectService('rr+ws://'+ip+':11111/?service=m1k',None,None,None,None)
+		# set log level for debug
+		# RRN.SetLogLevel(RR.LogLevel_Debug)
+		#connect to service
+		while True:
+			try:
+				sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')
+				await RRN.AsyncSleep(1, None)
+				m1k_obj = sub.GetDefaultClient()
+				break
+			except RR.ConnectionException:
+				await RRN.AsyncSleep(1, None)
+
+
+		#subscribe to wire
+		samples_wire=sub.SubscribeWire("samples")
+
 		#set mode for each channel
 		m1k_obj.async_setmode('A','SVMI',None)
 		m1k_obj.async_setmode('B','HI_Z',None)
@@ -24,9 +39,9 @@ async def client_plotly():
 
 		#start streaming
 		m1k_obj.async_StartStreaming(None)
-		samples_wire=await m1k_obj.samples.AsyncConnect(None)
+		# samples_wire=await m1k_obj.samples.AsyncConnect(None)
 		print_div("Running!")
-		#hide start
+		#hide start button
 		document.getElementById("start").style.display = "none";
 
 
@@ -47,11 +62,12 @@ async def client_plotly():
 async def plot(samples_wire):
 	global x, y_A, y_B, timestamp
 	#check if new data received
-	if timestamp==samples_wire.LastValueReceivedTime:
+	sample_packet=samples_wire.TryGetInValue()
+	if (not sample_packet[0]) or sample_packet[-1]==timestamp:
 		return 
 
-	sample=samples_wire.InValue
-	timestamp=samples_wire.LastValueReceivedTime	
+	sample=sample_packet[1]
+	timestamp=sample_packet[-1]	
 
 	y_A=np.roll(y_A,1)
 	y_A[0]=sample.A[0]
