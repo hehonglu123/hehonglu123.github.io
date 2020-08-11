@@ -135,6 +135,10 @@
 						{
 								$("#print_div").append("<p>" + message)
 						}
+						function raise_err(message)
+						{
+								alert(message);
+						}
 						/* When the user clicks on the button, 
 						toggle between hiding and showing the dropdown content */
 						function Channel_A() {
@@ -378,17 +382,21 @@
 					<label for="max">Max Value:</label>
 					<textarea id="max" name="max" rows="1" cols="5">5</textarea>
 				</div>
-				<div id="period_div">
-					<label for="period">Period:</label>
-					<textarea id="period" name="period" rows="1" cols="5">100</textarea>
+				<div id="frequency_div">
+					<label for="frequency">Frequency:</label>
+					<textarea id="frequency" name="frequency" rows="1" cols="5">100</textarea>
 				</div>
 				<div id="delay_div">
 					<label for="delay">Delay frac_Period:</label>
 					<textarea id="delay" name="delay" rows="1" cols="5">0.25</textarea>
 				</div>
 				<div id="duty_div">
-					<label for="duty">Duty Cycle, Square only:</label>
+					<label for="duty">Duty Cycle, (Square only):</label>
 					<textarea id="duty" name="duty" rows="1" cols="5">0.5</textarea>
+				</div>
+				<div id="time_div">
+					<label for="time">Time Axis (ms):</label>
+					<textarea id="time" name="time" rows="1" cols="5">10</textarea>
 				</div>
 
 				<div id="plot">      <!-- Plotly chart will be drawn inside this DIV -->  </div>

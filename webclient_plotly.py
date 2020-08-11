@@ -1,19 +1,33 @@
-from js import print_div, document
+from js import print_div, document, raise_err
 from RobotRaconteur.Client import *
 import numpy as np
 import time, traceback
 from js import Plotly
 
+SAMPLE_RATE=100000
+timestamp=None
+#IP of service
 ip=document.getElementById("ip").value
 
-periodvalue=50
-x = np.linspace(0, 1, periodvalue)
-y_A = np.zeros(periodvalue)
-y_B = np.zeros(periodvalue)
-timestamp=0
+#streaming parameters
+frequency=int(document.getElementById("frequency").value)
+#bug here, time_axis cant get >10
+time_axis=int(document.getElementById("time").value)	
+
+cycles_onscreen=time_axis/(1000/frequency)
+if cycles_onscreen<1:
+	raise_err("time axis must be greater than 1000/freq")
+
+#plot settings
+points_onscreen=int(time_axis*SAMPLE_RATE/1000)		#ensure time_axis is accurate, based on sampling rate
+stream_num_sample=int(points_onscreen/cycles_onscreen)
+# stream_num_sample=10000
+x = np.linspace(0, time_axis, points_onscreen)
+y_A = np.zeros(points_onscreen)
+y_B = np.zeros(points_onscreen)
 
 async def client_plotly():
-
+	global m1k_obj
 	try:
 		# set log level for debug
 		# RRN.SetLogLevel(RR.LogLevel_Debug)
@@ -31,18 +45,20 @@ async def client_plotly():
 		#subscribe to wire
 		samples_wire=sub.SubscribeWire("samples")
 
-		#set mode for each channel
-		m1k_obj.async_setmode('A','SVMI',None)
-		m1k_obj.async_setmode('B','HI_Z',None)
-		#start waveform
-		m1k_obj.async_wave('A', 'sine', 0, 5, periodvalue, -(periodvalue / 4), 0.5, None)
+		#reset mode for each channel
+		# m1k_obj.async_setmode('A','HI_Z',None)
+		# m1k_obj.async_setmode('B','HI_Z',None)
+
+		
 
 		#start streaming
+		m1k_obj.async_s_sample_size(stream_num_sample,None)
+		
 		m1k_obj.async_StartStreaming(None)
 		# samples_wire=await m1k_obj.samples.AsyncConnect(None)
 		print_div("Running!")
 		#hide start button
-		document.getElementById("start").style.display = "none";
+		# document.getElementById("start").style.display = "none";
 
 
 		while True:
@@ -60,19 +76,20 @@ async def client_plotly():
 		raise
 
 async def plot(samples_wire):
-	global x, y_A, y_B, timestamp
+	global x, y_A, y_B, timestamp, m1k_obj
+
 	#check if new data received
 	sample_packet=samples_wire.TryGetInValue()
 	if (not sample_packet[0]) or sample_packet[-1]==timestamp:
 		return 
 
-	sample=sample_packet[1]
+	samples=sample_packet[1]
 	timestamp=sample_packet[-1]	
 
-	y_A=np.roll(y_A,1)
-	y_A[0]=sample.A[0]
-	y_B=np.roll(y_B,1)
-	y_B[0]=sample.B[0]
+	y_A=np.roll(y_A,stream_num_sample)
+	y_A[:stream_num_sample]=samples[::4]
+	y_B=np.roll(y_B,stream_num_sample)
+	y_B[:stream_num_sample]=samples[2::4]
 
 	waveform_A={ 'y': y_A, 'x': x ,'xaxis': 'x2', 'yaxis': 'y2' ,'mode':'lines','name':'channel_A','type':'scatter','marker':{'size':10,'color':'#e31010'}}
 	waveform_B={ 'y': y_B, 'x': x ,'xaxis': 'x1', 'yaxis': 'y1' ,'mode':'lines','name':'channel_B','type':'scatter','marker':{'size':10,'color':'#0000FF'}}
@@ -112,7 +129,7 @@ async def plot(samples_wire):
 	'xanchor': 'left',
 	'y': 0,
 	'yanchor': 'top',
-	'text': 'Y axis label',
+	'text': '  ms',
 	'showarrow': False}
 	]
 	}

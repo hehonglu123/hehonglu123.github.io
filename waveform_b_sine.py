@@ -13,7 +13,8 @@ async def change_mode():
 		#get parameters
 		min_value=float(document.getElementById("min").value)
 		max_value=float(document.getElementById("max").value)
-		period_value=float(document.getElementById("period").value)
+		frequency_value=float(document.getElementById("frequency").value)
+		period_value=int(100000/frequency_value)
 		delay=float(document.getElementById("delay").value)
 		duty=float(document.getElementById("duty").value)
 
