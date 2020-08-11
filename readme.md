@@ -3,8 +3,8 @@
 * FireFox Preferred
 
 Type in `about:config` 
-* Find "privacy.file_unique_origin" and set it to false.
-* Find "network.websocket.allowInsecureFromHTTPS" and set it to true
+* Find `privacy.file_unique_origin` and set it to false.
+* Find `network.websocket.allowInsecureFromHTTPS` and set it to true
 
 ### Usage:
 Make sure have the m1k service running!
