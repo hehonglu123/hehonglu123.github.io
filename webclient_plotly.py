@@ -11,23 +11,10 @@ ip=document.getElementById("ip").value
 
 #streaming parameters
 frequency=int(document.getElementById("frequency").value)
-#bug here, time_axis cant get >10
-time_axis=int(document.getElementById("time").value)	
-
-cycles_onscreen=time_axis/(1000/frequency)
-if cycles_onscreen<1:
-	raise_err("time axis must be greater than 1000/freq")
-
-#plot settings
-points_onscreen=int(time_axis*SAMPLE_RATE/1000)		#ensure time_axis is accurate, based on sampling rate
-stream_num_sample=int(points_onscreen/cycles_onscreen)
-# stream_num_sample=10000
-x = np.linspace(0, time_axis, points_onscreen)
-y_A = np.zeros(points_onscreen)
-y_B = np.zeros(points_onscreen)
+time_axis=None
 
 async def client_plotly():
-	global m1k_obj
+	global m1k_obj,time_axis,x,y_A,y_B
 	try:
 		# set log level for debug
 		# RRN.SetLogLevel(RR.LogLevel_Debug)
@@ -52,20 +39,40 @@ async def client_plotly():
 		
 
 		#start streaming
-		m1k_obj.async_s_sample_size(stream_num_sample,None)
+		await m1k_obj.async_set_sample_size(100,None)
 		
 		m1k_obj.async_StartStreaming(None)
 		# samples_wire=await m1k_obj.samples.AsyncConnect(None)
 		print_div("Running!")
 		#hide start button
-		# document.getElementById("start").style.display = "none";
+		document.getElementById("start").style.display = "none";
 
 
 		while True:
 			try:
+				
+				time_axis_new=int(document.getElementById("slide").value)
+				if time_axis_new!=time_axis:	
+					time_axis=int(document.getElementById("slide").value)	
+
+					cycles_onscreen=time_axis/(1000/frequency)
+					if cycles_onscreen<1:
+						raise_err("time axis must be greater than 1000/freq")
+
+					#plot settings
+					points_onscreen=int(time_axis*SAMPLE_RATE/1000)		#ensure time_axis is accurate, based on sampling rate
+					
+					await m1k_obj.async_set_sample_size(int(points_onscreen/cycles_onscreen),None)
+					x = np.linspace(0, time_axis, points_onscreen)
+					y_A = np.zeros(points_onscreen)
+					y_B = np.zeros(points_onscreen)
+
+				time_axis=time_axis_new
+
 				#leave time for background
 				await RRN.AsyncSleep(0.001, None)
 				await plot(samples_wire)
+
 				
 			except RR.RobotRaconteurPythonError.ValueNotSetException:
 				pass
@@ -86,10 +93,16 @@ async def plot(samples_wire):
 	samples=sample_packet[1]
 	timestamp=sample_packet[-1]	
 
-	y_A=np.roll(y_A,stream_num_sample)
-	y_A[:stream_num_sample]=samples[::4]
-	y_B=np.roll(y_B,stream_num_sample)
-	y_B[:stream_num_sample]=samples[2::4]
+	stream_num_sample=await m1k_obj.async_get_sample_size(None)
+
+	try:
+		y_A=np.roll(y_A,stream_num_sample)
+		y_A[:stream_num_sample]=samples[::4]
+		y_B=np.roll(y_B,stream_num_sample)
+		y_B[:stream_num_sample]=samples[2::4]
+	except ValueError:
+		pass
+
 
 	waveform_A={ 'y': y_A, 'x': x ,'xaxis': 'x2', 'yaxis': 'y2' ,'mode':'lines','name':'channel_A','type':'scatter','marker':{'size':10,'color':'#e31010'}}
 	waveform_B={ 'y': y_B, 'x': x ,'xaxis': 'x1', 'yaxis': 'y1' ,'mode':'lines','name':'channel_B','type':'scatter','marker':{'size':10,'color':'#0000FF'}}
