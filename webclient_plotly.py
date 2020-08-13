@@ -19,9 +19,10 @@ async def client_plotly():
 		# set log level for debug
 		# RRN.SetLogLevel(RR.LogLevel_Debug)
 		#connect to service
+		# sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')
 		while True:
-			try:
-				sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')
+			try:	
+				sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')			
 				await RRN.AsyncSleep(1, None)
 				m1k_obj = sub.GetDefaultClient()
 				break
@@ -40,8 +41,10 @@ async def client_plotly():
 
 		#start streaming
 		await m1k_obj.async_set_sample_size(100,None)
-		
-		m1k_obj.async_StartStreaming(None)
+		try:
+			m1k_obj.async_StartStreaming(None)
+		except:
+			pass
 		# samples_wire=await m1k_obj.samples.AsyncConnect(None)
 		print_div("Running!")
 		#hide start button
