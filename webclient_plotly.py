@@ -19,11 +19,9 @@ async def client_plotly():
 		# set log level for debug
 		# RRN.SetLogLevel(RR.LogLevel_Debug)
 		#connect to service
-		# sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')
+		sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')
 		while True:
 			try:	
-				sub=RRN.SubscribeService('rr+ws://'+ip+':11111/?service=m1k')			
-				await RRN.AsyncSleep(1, None)
 				m1k_obj = sub.GetDefaultClient()
 				break
 			except RR.ConnectionException:
