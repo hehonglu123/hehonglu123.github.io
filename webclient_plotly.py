@@ -4,18 +4,16 @@ import numpy as np
 import time, traceback
 from js import Plotly
 
+# globals
 SAMPLE_RATE=100000
 timestamp=None
-#IP of service
-ip=document.getElementById("ip").value
-
-#streaming parameters
-frequency=int(document.getElementById("frequency").value)
 time_axis=None
 
 async def client_plotly():
 	global m1k_obj,time_axis,x,y_A,y_B
 	try:
+		#IP of service
+		ip=document.getElementById("ip").value
 		# set log level for debug
 		# RRN.SetLogLevel(RR.LogLevel_Debug)
 		#connect to service
@@ -43,8 +41,7 @@ async def client_plotly():
 			m1k_obj.async_StartStreaming(None)
 		except:
 			pass
-		# samples_wire=await m1k_obj.samples.AsyncConnect(None)
-		print_div("Running!")
+
 		#hide start button
 		document.getElementById("start").style.display = "none";
 
@@ -55,6 +52,7 @@ async def client_plotly():
 				time_axis_new=int(document.getElementById("slide").value)
 				if time_axis_new!=time_axis:	
 					time_axis=int(document.getElementById("slide").value)	
+					frequency=int(document.getElementById("frequency").value)
 
 					cycles_onscreen=time_axis/(1000/frequency)
 					if cycles_onscreen<1:
@@ -64,6 +62,7 @@ async def client_plotly():
 					points_onscreen=int(time_axis*SAMPLE_RATE/1000)		#ensure time_axis is accurate, based on sampling rate
 					
 					await m1k_obj.async_set_sample_size(int(points_onscreen/cycles_onscreen),None)
+					# await m1k_obj.async_set_sample_size(1000,None)
 					x = np.linspace(0, time_axis, points_onscreen)
 					y_A = np.zeros(points_onscreen)
 					y_B = np.zeros(points_onscreen)
@@ -79,7 +78,7 @@ async def client_plotly():
 				pass
 
 	except:
-		print_div(traceback.format_exc())
+		raise_err(traceback.format_exc())
 		m1k_obj.async_StopStreaming(None)
 		raise
 
