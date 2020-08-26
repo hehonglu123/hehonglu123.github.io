@@ -14,4 +14,5 @@ Simply open the index.html with FireFox browser. Or go to https://hehonglu123.gi
 
 At the top left, input your IP address of the service.
 
+![](browser.JPG)
 
