@@ -24,7 +24,7 @@ async def client_plotly():
 				break
 			except RR.ConnectionException:
 				await RRN.AsyncSleep(1, None)
-
+		# m1k_obj = sub.AsyncGetDefaultClient(30)
 
 		#subscribe to wire
 		samples_wire=sub.SubscribeWire("samples")
