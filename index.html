@@ -282,6 +282,13 @@
 								const waveform_a_square = await response.text();
 								pyodide.runPython(waveform_a_square)
 						}
+						async function waveform_a_random(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_a_random.py", {cache: "no-store"});
+								const waveform_a_random = await response.text();
+								pyodide.runPython(waveform_a_random)
+						}
 						async function waveform_b_sine(){
 								await languagePluginLoader;
 								await pyodide.loadPackage(["numpy"]);  
@@ -316,6 +323,13 @@
 								const response = await fetch("waveform_b_square.py", {cache: "no-store"});
 								const waveform_b_square = await response.text();
 								pyodide.runPython(waveform_b_square)
+						}
+						async function waveform_b_random(){
+								await languagePluginLoader;
+								await pyodide.loadPackage(["numpy"]);  
+								const response = await fetch("waveform_b_random.py", {cache: "no-store"});
+								const waveform_b_random = await response.text();
+								pyodide.runPython(waveform_b_random)
 						}
 						
 				</script>
@@ -357,6 +371,7 @@
 						<a onclick=waveform_a_sawtooth()>sawtooth</a>
 						<a onclick=waveform_a_stairstep()>stairstep</a>
 						<a onclick=waveform_a_square()>square</a>
+						<a onclick=waveform_a_random()>random</a>
 					</div>
 				</div>
 
@@ -368,6 +383,7 @@
 						<a onclick=waveform_b_sawtooth()>sawtooth</a>
 						<a onclick=waveform_b_stairstep()>stairstep</a>
 						<a onclick=waveform_b_square()>square</a>
+						<a onclick=waveform_b_random()>random</a>
 					</div>
 				</div>
 
