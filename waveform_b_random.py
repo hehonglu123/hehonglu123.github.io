@@ -26,11 +26,13 @@ async def change_mode():
 		ip=document.getElementById("ip").value
 		m1k_obj=await RRN.AsyncConnectService('rr+ws://'+ip+':11111/?service=m1k',None,None,None,None)
 
+		#generate waveform
+		randomwaveform=5*np.random.random(100)
+		
 		#set mode for each channel
 		m1k_obj.async_setmode('A','SVMI',None)
 
 		#start waveform
-		randomwaveform=5*np.random.random(100)
 		m1k_obj.async_arbitrary('B',randomwaveform,None)
 	except:
 		raise_err(traceback.format_exc())
