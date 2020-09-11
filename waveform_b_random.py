@@ -30,7 +30,7 @@ async def change_mode():
 		randomwaveform=5*np.random.random(100)
 		
 		#set mode for each channel
-		m1k_obj.async_setmode('A','SVMI',None)
+		m1k_obj.async_setmode('B','SVMI',None)
 
 		#start waveform
 		m1k_obj.async_arbitrary('B',randomwaveform,None)
